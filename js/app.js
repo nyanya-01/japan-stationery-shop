@@ -72,7 +72,7 @@ document.querySelectorAll('.product-card').forEach(card => {
 
   increaseBtn.addEventListener('click', () => {
     const val = parseInt(input.value);
-    if (val < 20) input.value = val + 1;
+    if (val < 5) input.value = val + 1;
   });
 });
 
