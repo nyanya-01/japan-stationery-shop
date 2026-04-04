@@ -298,10 +298,36 @@ body {
   margin-bottom: 16px;
 }
 
+.product-region-select {
+  margin-bottom: 12px;
+}
+
+.product-region-select label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.product-region-select select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+}
+
 .product-price {
   display: flex;
   align-items: baseline;
   gap: 8px;
+  margin-bottom: 4px;
+}
+
+.price-extra-note {
+  font-size: 0.78rem;
+  color: var(--text-light);
   margin-bottom: 16px;
 }
 
@@ -414,6 +440,18 @@ body {
   font-weight: 700;
   color: var(--primary);
   margin-bottom: 4px;
+}
+
+.shipping-extra {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.per-unit {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-light);
 }
 
 .shipping-days {

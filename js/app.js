@@ -3,11 +3,35 @@
 // Cart & Payment Logic
 // =====================
 
-const SHIPPING_RATES = {
-  asia: { label: 'Asia', cost: 6.00 },
-  us: { label: 'United States', cost: 12.00 },
-  europe: { label: 'Europe', cost: 14.00 },
+const BASE_PRICE = 12.00;
+
+// Shipping cost for the 1st item per region
+const FIRST_ITEM_SHIPPING = {
+  asia: 30.00,
+  us: 70.00,
+  europe: 50.00,
 };
+
+// Shipping cost for each additional item
+const ADDITIONAL_SHIPPING = 10.00;
+
+// Calculate total price (shipping included)
+function calcTotal(qty, region) {
+  if (qty <= 0) return 0;
+  const itemCost = BASE_PRICE * qty;
+  const shippingCost = FIRST_ITEM_SHIPPING[region] + Math.max(0, qty - 1) * ADDITIONAL_SHIPPING;
+  return itemCost + shippingCost;
+}
+
+// Price per pack for display (1st pack)
+function calcFirstPackPrice(region) {
+  return BASE_PRICE + FIRST_ITEM_SHIPPING[region];
+}
+
+// Price per additional pack
+function calcAdditionalPackPrice() {
+  return BASE_PRICE + ADDITIONAL_SHIPPING;
+}
 
 // --- Cart State ---
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -20,10 +44,11 @@ const cartClose = document.getElementById('cartClose');
 const cartItems = document.getElementById('cartItems');
 const cartFooter = document.getElementById('cartFooter');
 const cartCount = document.getElementById('cartCount');
-const subtotalEl = document.getElementById('subtotal');
-const shippingCostEl = document.getElementById('shippingCost');
 const totalPriceEl = document.getElementById('totalPrice');
-const shippingRegion = document.getElementById('shippingRegion');
+const cartRegion = document.getElementById('cartRegion');
+const productRegion = document.getElementById('productRegion');
+const displayPrice = document.getElementById('displayPrice');
+const priceExtraNote = document.getElementById('priceExtraNote');
 const bybitPayBtn = document.getElementById('bybitPayBtn');
 
 // --- Cart Toggle ---
@@ -59,6 +84,30 @@ document.querySelectorAll('.product-card').forEach(card => {
   });
 });
 
+// --- Product Price Display ---
+function updateProductPrice() {
+  const region = productRegion.value;
+  const qty = parseInt(document.querySelector('.qty-input').value) || 1;
+  const total = calcTotal(qty, region);
+  const firstPrice = calcFirstPackPrice(region);
+  const additionalPrice = calcAdditionalPackPrice();
+
+  displayPrice.textContent = `$${total.toFixed(2)}`;
+
+  if (qty > 1) {
+    priceExtraNote.textContent = `$${firstPrice.toFixed(2)} (1st) + $${additionalPrice.toFixed(2)} x ${qty - 1} additional`;
+  } else {
+    priceExtraNote.textContent = `+$${additionalPrice.toFixed(2)} per additional pack`;
+  }
+}
+
+productRegion.addEventListener('change', () => {
+  updateProductPrice();
+  // Sync cart region selector
+  cartRegion.value = productRegion.value;
+  updateTotals();
+});
+
 // --- Quantity Controls ---
 document.querySelectorAll('.product-card').forEach(card => {
   const input = card.querySelector('.qty-input');
@@ -67,12 +116,26 @@ document.querySelectorAll('.product-card').forEach(card => {
 
   decreaseBtn.addEventListener('click', () => {
     const val = parseInt(input.value);
-    if (val > 1) input.value = val - 1;
+    if (val > 1) {
+      input.value = val - 1;
+      updateProductPrice();
+    }
   });
 
   increaseBtn.addEventListener('click', () => {
     const val = parseInt(input.value);
-    if (val < 5) input.value = val + 1;
+    if (val < 5) {
+      input.value = val + 1;
+      updateProductPrice();
+    }
+  });
+
+  input.addEventListener('change', () => {
+    let val = parseInt(input.value);
+    if (isNaN(val) || val < 1) val = 1;
+    if (val > 5) val = 5;
+    input.value = val;
+    updateProductPrice();
   });
 });
 
@@ -84,14 +147,14 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     const item = {
       id: btn.dataset.id,
       name: btn.dataset.name,
-      price: parseFloat(btn.dataset.price),
+      basePrice: parseFloat(btn.dataset.basePrice),
       img: btn.dataset.img,
       qty: qty,
     };
 
     const existing = cart.find(c => c.id === item.id);
     if (existing) {
-      existing.qty += qty;
+      existing.qty = Math.min(existing.qty + qty, 5);
     } else {
       cart.push(item);
     }
@@ -113,7 +176,8 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
 
 // --- Render Cart ---
 function renderCart() {
-  cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  cartCount.textContent = totalQty;
 
   if (cart.length === 0) {
     cartItems.innerHTML = '<p class="cart-empty">Your cart is empty</p>';
@@ -122,13 +186,16 @@ function renderCart() {
   }
 
   cartFooter.style.display = 'block';
+  const region = cartRegion.value;
 
-  cartItems.innerHTML = cart.map(item => `
+  cartItems.innerHTML = cart.map(item => {
+    const itemTotal = calcTotal(item.qty, region);
+    return `
     <div class="cart-item" data-id="${item.id}">
       <img src="${item.img}" alt="${item.name}" class="cart-item-img">
       <div class="cart-item-details">
         <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+        <div class="cart-item-price">$${itemTotal.toFixed(2)} (${item.qty} pack${item.qty > 1 ? 's' : ''})</div>
         <div class="cart-item-qty">
           <button data-cart-action="decrease" data-id="${item.id}">-</button>
           <span>${item.qty}</span>
@@ -137,7 +204,8 @@ function renderCart() {
       </div>
       <button class="cart-item-remove" data-cart-action="remove" data-id="${item.id}">Remove</button>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   // Cart item event listeners
   cartItems.querySelectorAll('[data-cart-action]').forEach(btn => {
@@ -148,7 +216,7 @@ function renderCart() {
       if (!item) return;
 
       if (action === 'increase') {
-        item.qty++;
+        if (item.qty < 5) item.qty++;
       } else if (action === 'decrease') {
         item.qty--;
         if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
@@ -166,17 +234,17 @@ function renderCart() {
 
 // --- Update Totals ---
 function updateTotals() {
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const region = shippingRegion.value;
-  const shipping = cart.length > 0 ? SHIPPING_RATES[region].cost : 0;
-  const total = subtotal + shipping;
-
-  subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-  shippingCostEl.textContent = `$${shipping.toFixed(2)}`;
+  const region = cartRegion.value;
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  const total = calcTotal(totalQty, region);
   totalPriceEl.textContent = `$${total.toFixed(2)}`;
 }
 
-shippingRegion.addEventListener('change', updateTotals);
+cartRegion.addEventListener('change', () => {
+  productRegion.value = cartRegion.value;
+  updateProductPrice();
+  renderCart();
+});
 
 // --- Save Cart ---
 function saveCart() {
@@ -185,21 +253,18 @@ function saveCart() {
 
 // --- Get Order Summary ---
 function getOrderSummary() {
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const region = shippingRegion.value;
-  const shipping = SHIPPING_RATES[region].cost;
-  const total = subtotal + shipping;
+  const region = cartRegion.value;
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  const total = calcTotal(totalQty, region);
+  const regionLabels = { asia: 'Asia', us: 'United States', europe: 'Europe' };
 
   return {
     items: cart.map(item => ({
       name: item.name,
       qty: item.qty,
-      price: item.price,
-      amount: item.price * item.qty,
     })),
-    subtotal,
-    shipping,
-    shippingRegion: SHIPPING_RATES[region].label,
+    totalQty,
+    region: regionLabels[region],
     total,
     currency: 'USD',
   };
@@ -230,16 +295,7 @@ function initPayPal() {
           amount: {
             currency_code: 'USD',
             value: order.total.toFixed(2),
-            breakdown: {
-              item_total: { currency_code: 'USD', value: order.subtotal.toFixed(2) },
-              shipping: { currency_code: 'USD', value: order.shipping.toFixed(2) },
-            }
           },
-          items: order.items.map(item => ({
-            name: item.name,
-            unit_amount: { currency_code: 'USD', value: item.price.toFixed(2) },
-            quantity: item.qty.toString(),
-          })),
         }],
       });
     },
@@ -260,8 +316,6 @@ function initPayPal() {
 }
 
 // --- Bybit Pay ---
-// Bybit Pay uses payment links. Replace the URL below with your Bybit Pay merchant link.
-// You can generate payment links from your Bybit Pay merchant dashboard.
 bybitPayBtn.addEventListener('click', () => {
   const order = getOrderSummary();
 
@@ -270,18 +324,13 @@ bybitPayBtn.addEventListener('click', () => {
     return;
   }
 
-  // Option 1: Redirect to Bybit Pay payment link (replace with your merchant URL)
-  // window.location.href = 'https://www.bybit.com/fiat/trade/otc/pay/...';
-
-  // Option 2: Show order summary for manual Bybit Pay
   const summary = [
     '=== Order Summary for Bybit Pay ===',
     '',
-    ...order.items.map(i => `${i.name} x${i.qty} = $${i.amount.toFixed(2)}`),
+    ...order.items.map(i => `${i.name} x${i.qty}`),
     '',
-    `Subtotal: $${order.subtotal.toFixed(2)}`,
-    `Shipping (${order.shippingRegion}): $${order.shipping.toFixed(2)}`,
-    `Total: $${order.total.toFixed(2)}`,
+    `Region: ${order.region}`,
+    `Total: $${order.total.toFixed(2)} (shipping included)`,
     '',
     'Please send the exact amount via Bybit Pay.',
     'Contact us after payment with your transaction ID.',
@@ -291,6 +340,7 @@ bybitPayBtn.addEventListener('click', () => {
 });
 
 // --- Init ---
+updateProductPrice();
 renderCart();
 
 // Delay PayPal init to ensure SDK is loaded

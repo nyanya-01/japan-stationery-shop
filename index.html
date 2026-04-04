@@ -20,7 +20,7 @@
     </a>
     <nav class="nav">
       <a href="#products">Products</a>
-      <a href="#shipping">Shipping</a>
+      <a href="#shipping">Pricing</a>
       <a href="#about">About</a>
     </nav>
     <button class="cart-btn" id="cartBtn">
@@ -66,10 +66,19 @@
             Smooth writing, clean erasing
           </p>
           <p class="product-model">Model: NO-30S10-5X5B</p>
-          <div class="product-price">
-            <span class="price">$12.00</span>
-            <span class="price-note">USD / pack</span>
+          <div class="product-region-select">
+            <label for="productRegion">Your Region:</label>
+            <select id="productRegion">
+              <option value="asia">Asia</option>
+              <option value="us">United States</option>
+              <option value="europe">Europe</option>
+            </select>
           </div>
+          <div class="product-price">
+            <span class="price" id="displayPrice">$42.00</span>
+            <span class="price-note">USD / pack (shipping included)</span>
+          </div>
+          <p class="price-extra-note" id="priceExtraNote"></p>
           <div class="product-qty">
             <button class="qty-btn" data-action="decrease">-</button>
             <input type="number" class="qty-input" value="1" min="1" max="5">
@@ -78,7 +87,7 @@
           <button class="btn btn-primary add-to-cart"
             data-id="campus-5color"
             data-name="KOKUYO Campus Notebook 5-Color Pack"
-            data-price="12.00"
+            data-base-price="12.00"
             data-img="Stationaery/campas.jpg">
             Add to Cart
           </button>
@@ -92,28 +101,31 @@
 <!-- Shipping -->
 <section class="shipping" id="shipping">
   <div class="container">
-    <h2 class="section-title">Shipping Rates</h2>
-    <p class="section-sub">All items ship from Japan via tracked airmail.</p>
+    <h2 class="section-title">Pricing (Shipping Included)</h2>
+    <p class="section-sub">All prices include shipping from Japan via tracked airmail.</p>
     <div class="shipping-grid">
       <div class="shipping-card">
         <div class="shipping-icon">&#127471;&#127477;</div>
         <h3>Asia</h3>
         <p class="shipping-countries">China, Korea, Taiwan, Hong Kong, Singapore, Thailand, etc.</p>
-        <p class="shipping-price">$6.00</p>
+        <p class="shipping-price">$42.00 <span class="per-unit">/ 1st pack</span></p>
+        <p class="shipping-extra">+$22.00 per additional pack</p>
         <p class="shipping-days">5-10 business days</p>
       </div>
       <div class="shipping-card">
         <div class="shipping-icon">&#127482;&#127480;</div>
         <h3>United States</h3>
         <p class="shipping-countries">All US states & territories</p>
-        <p class="shipping-price">$12.00</p>
+        <p class="shipping-price">$82.00 <span class="per-unit">/ 1st pack</span></p>
+        <p class="shipping-extra">+$22.00 per additional pack</p>
         <p class="shipping-days">7-14 business days</p>
       </div>
       <div class="shipping-card">
         <div class="shipping-icon">&#127466;&#127482;</div>
         <h3>Europe</h3>
         <p class="shipping-countries">UK, Germany, France, Italy, Spain, etc.</p>
-        <p class="shipping-price">$14.00</p>
+        <p class="shipping-price">$62.00 <span class="per-unit">/ 1st pack</span></p>
+        <p class="shipping-extra">+$22.00 per additional pack</p>
         <p class="shipping-days">10-18 business days</p>
       </div>
     </div>
@@ -157,24 +169,16 @@
   </div>
   <div class="cart-footer" id="cartFooter" style="display:none;">
     <div class="cart-shipping-select">
-      <label for="shippingRegion">Shipping Region:</label>
-      <select id="shippingRegion">
-        <option value="asia">Asia - $6.00</option>
-        <option value="us">United States - $12.00</option>
-        <option value="europe">Europe - $14.00</option>
+      <label for="cartRegion">Shipping Region:</label>
+      <select id="cartRegion">
+        <option value="asia">Asia</option>
+        <option value="us">United States</option>
+        <option value="europe">Europe</option>
       </select>
     </div>
     <div class="cart-summary">
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <span id="subtotal">$0.00</span>
-      </div>
-      <div class="summary-row">
-        <span>Shipping</span>
-        <span id="shippingCost">$0.00</span>
-      </div>
       <div class="summary-row total">
-        <span>Total</span>
+        <span>Total (shipping included)</span>
         <span id="totalPrice">$0.00</span>
       </div>
     </div>
