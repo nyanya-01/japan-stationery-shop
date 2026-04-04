@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japan Stationery Shop - Premium Japanese Stationery Worldwide</title>
+  <meta name="description" content="Shop premium Japanese stationery. KOKUYO Campus notebooks and more, shipped worldwide from Japan.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <span class="logo-jp">日本文具</span>
+      <span class="logo-en">Japan Stationery Shop</span>
+    </a>
+    <nav class="nav">
+      <a href="#products">Products</a>
+      <a href="#shipping">Shipping</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="cart-btn" id="cartBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1>Premium Japanese Stationery<br><span>Shipped Worldwide from Japan</span></h1>
+    <p>Discover the quality and craftsmanship of authentic Japanese stationery.</p>
+    <a href="#products" class="btn btn-primary">Shop Now</a>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="products" id="products">
+  <div class="container">
+    <h2 class="section-title">Products</h2>
+    <div class="product-grid">
+
+      <div class="product-card" data-product-id="campus-5color">
+        <div class="product-images">
+          <img src="Stationaery/campas.jpg" alt="KOKUYO Campus Notebook 5-Color Pack - Front" class="product-img active">
+          <img src="Stationaery/campas2.jpg" alt="KOKUYO Campus Notebook 5-Color Pack - Angle" class="product-img">
+          <div class="img-nav">
+            <button class="img-dot active" data-index="0"></button>
+            <button class="img-dot" data-index="1"></button>
+          </div>
+        </div>
+        <div class="product-info">
+          <span class="product-brand">KOKUYO</span>
+          <h3 class="product-name">Campus Notebook 5-Color Pack</h3>
+          <p class="product-desc">
+            5mm Grid (10mm guide lines) / 30 Sheets x 5 Books<br>
+            Semi-B5 size / Blue color series<br>
+            Smooth writing, clean erasing
+          </p>
+          <p class="product-model">Model: NO-30S10-5X5B</p>
+          <div class="product-price">
+            <span class="price">$12.00</span>
+            <span class="price-note">USD / pack</span>
+          </div>
+          <div class="product-qty">
+            <button class="qty-btn" data-action="decrease">-</button>
+            <input type="number" class="qty-input" value="1" min="1" max="20">
+            <button class="qty-btn" data-action="increase">+</button>
+          </div>
+          <button class="btn btn-primary add-to-cart"
+            data-id="campus-5color"
+            data-name="KOKUYO Campus Notebook 5-Color Pack"
+            data-price="12.00"
+            data-img="Stationaery/campas.jpg">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Shipping -->
+<section class="shipping" id="shipping">
+  <div class="container">
+    <h2 class="section-title">Shipping Rates</h2>
+    <p class="section-sub">All items ship from Japan via tracked airmail.</p>
+    <div class="shipping-grid">
+      <div class="shipping-card">
+        <div class="shipping-icon">&#127471;&#127477;</div>
+        <h3>Asia</h3>
+        <p class="shipping-countries">China, Korea, Taiwan, Hong Kong, Singapore, Thailand, etc.</p>
+        <p class="shipping-price">$6.00</p>
+        <p class="shipping-days">5-10 business days</p>
+      </div>
+      <div class="shipping-card">
+        <div class="shipping-icon">&#127482;&#127480;</div>
+        <h3>United States</h3>
+        <p class="shipping-countries">All US states & territories</p>
+        <p class="shipping-price">$12.00</p>
+        <p class="shipping-days">7-14 business days</p>
+      </div>
+      <div class="shipping-card">
+        <div class="shipping-icon">&#127466;&#127482;</div>
+        <h3>Europe</h3>
+        <p class="shipping-countries">UK, Germany, France, Italy, Spain, etc.</p>
+        <p class="shipping-price">$14.00</p>
+        <p class="shipping-days">10-18 business days</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="container">
+    <h2 class="section-title">About Us</h2>
+    <p>We ship authentic Japanese stationery directly from Japan to customers worldwide. Every product is carefully packaged to ensure it arrives in perfect condition.</p>
+    <div class="about-features">
+      <div class="feature">
+        <span class="feature-icon">&#9989;</span>
+        <h4>100% Authentic</h4>
+        <p>Genuine Japanese products</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">&#128230;</span>
+        <h4>Careful Packaging</h4>
+        <p>Safe international shipping</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">&#127757;</span>
+        <h4>Worldwide Delivery</h4>
+        <p>Asia, US & Europe</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Shopping Cart</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <p class="cart-empty">Your cart is empty</p>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-shipping-select">
+      <label for="shippingRegion">Shipping Region:</label>
+      <select id="shippingRegion">
+        <option value="asia">Asia - $6.00</option>
+        <option value="us">United States - $12.00</option>
+        <option value="europe">Europe - $14.00</option>
+      </select>
+    </div>
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">$0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span id="shippingCost">$0.00</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="totalPrice">$0.00</span>
+      </div>
+    </div>
+    <div class="payment-buttons">
+      <div id="paypal-button-container"></div>
+      <button class="btn btn-bybit" id="bybitPayBtn">
+        Pay with Bybit Pay
+      </button>
+    </div>
+  </div>
+</aside>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 Japan Stationery Shop. All rights reserved.</p>
+    <p>Payment accepted: PayPal / Bybit Pay</p>
+  </div>
+</footer>
+
+<!-- PayPal SDK - Replace YOUR_CLIENT_ID with actual PayPal client ID -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
