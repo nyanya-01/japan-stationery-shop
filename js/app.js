@@ -331,15 +331,11 @@ function openBybitModal() {
   document.getElementById('bybitTotalAmount').textContent = totalStr;
   document.getElementById('bybitTotalStep1').textContent = totalStr;
 
-  // Populate hidden form field with order summary
+  // Reset form then set hidden field (must be after reset)
+  document.getElementById('bybitOrderForm').reset();
   document.getElementById('bybitFormSummary').value =
     order.items.map(i => `${i.name} x${i.qty}`).join(', ') +
     ` | Region: ${order.region} | Total: ${totalStr} USDT`;
-
-  // Reset form and hide success
-  document.getElementById('bybitOrderForm').style.display = '';
-  document.getElementById('bybitSuccess').style.display = 'none';
-  document.getElementById('bybitOrderForm').reset();
 
   bybitOverlay.classList.add('open');
   bybitModal.classList.add('open');
@@ -363,38 +359,13 @@ bybitPayBtn.addEventListener('click', () => {
 bybitModalClose.addEventListener('click', closeBybitModal);
 bybitOverlay.addEventListener('click', closeBybitModal);
 
-// Formspree AJAX submission
-document.getElementById('bybitOrderForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const submitBtn = form.querySelector('[type="submit"]');
-  submitBtn.textContent = 'Submitting...';
-  submitBtn.disabled = true;
-
-  try {
-    const response = await fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { Accept: 'application/json' },
-    });
-
-    if (response.ok) {
-      form.style.display = 'none';
-      document.getElementById('bybitSuccess').style.display = 'block';
-      cart = [];
-      saveCart();
-      renderCart();
-    } else {
-      alert('Submission failed. Please try again or contact us directly.');
-      submitBtn.textContent = 'Submit Order';
-      submitBtn.disabled = false;
-    }
-  } catch {
-    alert('Network error. Please try again.');
-    submitBtn.textContent = 'Submit Order';
-    submitBtn.disabled = false;
-  }
-});
+// Clear cart and show success if redirected back from Formspree
+if (new URLSearchParams(window.location.search).get('order') === 'success') {
+  cart = [];
+  saveCart();
+  alert('Order submitted! Thank you. We will confirm by email within 24 hours.');
+  history.replaceState(null, '', window.location.pathname);
+}
 
 // --- Init ---
 updateProductPrice();

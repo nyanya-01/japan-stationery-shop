@@ -228,6 +228,8 @@
       <div class="bybit-step-content">
         <p class="bybit-step-title">Submit your order details</p>
         <form id="bybitOrderForm" action="https://formspree.io/f/xdapvynr" method="POST">
+          <input type="hidden" name="_subject" value="New Order - Japan Stationery Shop">
+          <input type="hidden" name="_next" value="https://nyanya-01.github.io/japan-stationery-shop/?order=success">
           <input type="hidden" name="order_summary" id="bybitFormSummary">
           <div class="form-group">
             <label>Full Name *</label>
@@ -248,12 +250,6 @@
           </div>
           <button type="submit" class="btn btn-bybit bybit-submit-btn">Submit Order</button>
         </form>
-        <!-- Success message (hidden by default) -->
-        <div class="bybit-success" id="bybitSuccess" style="display:none;">
-          <div class="bybit-success-icon">&#10003;</div>
-          <h4>Order Submitted!</h4>
-          <p>Thank you! We'll confirm your order by email within 24 hours.</p>
-        </div>
       </div>
     </div>
   </div>
