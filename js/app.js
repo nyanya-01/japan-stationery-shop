@@ -50,6 +50,9 @@ const productRegion = document.getElementById('productRegion');
 const displayPrice = document.getElementById('displayPrice');
 const priceExtraNote = document.getElementById('priceExtraNote');
 const bybitPayBtn = document.getElementById('bybitPayBtn');
+const bybitOverlay = document.getElementById('bybitOverlay');
+const bybitModal = document.getElementById('bybitModal');
+const bybitModalClose = document.getElementById('bybitModalClose');
 
 // --- Cart Toggle ---
 function openCart() {
@@ -315,28 +318,82 @@ function initPayPal() {
   }).render('#paypal-button-container');
 }
 
-// --- Bybit Pay ---
-bybitPayBtn.addEventListener('click', () => {
+// --- Bybit Pay Modal ---
+function openBybitModal() {
   const order = getOrderSummary();
 
+  // Populate order items
+  document.getElementById('bybitOrderItems').innerHTML =
+    order.items.map(i => `<div>${i.name} &times; ${i.qty}</div>`).join('');
+
+  // Populate totals
+  const totalStr = order.total.toFixed(2);
+  document.getElementById('bybitTotalAmount').textContent = totalStr;
+  document.getElementById('bybitTotalStep1').textContent = totalStr;
+
+  // Populate hidden form field with order summary
+  document.getElementById('bybitFormSummary').value =
+    order.items.map(i => `${i.name} x${i.qty}`).join(', ') +
+    ` | Region: ${order.region} | Total: ${totalStr} USDT`;
+
+  // Reset form and hide success
+  document.getElementById('bybitOrderForm').style.display = '';
+  document.getElementById('bybitSuccess').style.display = 'none';
+  document.getElementById('bybitOrderForm').reset();
+
+  bybitOverlay.classList.add('open');
+  bybitModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBybitModal() {
+  bybitOverlay.classList.remove('open');
+  bybitModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+bybitPayBtn.addEventListener('click', () => {
   if (cart.length === 0) {
     alert('Your cart is empty.');
     return;
   }
+  openBybitModal();
+});
 
-  const summary = [
-    '=== Order Summary for Bybit Pay ===',
-    '',
-    ...order.items.map(i => `${i.name} x${i.qty}`),
-    '',
-    `Region: ${order.region}`,
-    `Total: $${order.total.toFixed(2)} (shipping included)`,
-    '',
-    'Please send the exact amount via Bybit Pay.',
-    'Contact us after payment with your transaction ID.',
-  ].join('\n');
+bybitModalClose.addEventListener('click', closeBybitModal);
+bybitOverlay.addEventListener('click', closeBybitModal);
 
-  alert(summary);
+// Formspree AJAX submission
+document.getElementById('bybitOrderForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('[type="submit"]');
+  submitBtn.textContent = 'Submitting...';
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { Accept: 'application/json' },
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      document.getElementById('bybitSuccess').style.display = 'block';
+      cart = [];
+      saveCart();
+      renderCart();
+    } else {
+      alert('Submission failed. Please try again or contact us directly.');
+      submitBtn.textContent = 'Submit Order';
+      submitBtn.disabled = false;
+    }
+  } catch {
+    alert('Network error. Please try again.');
+    submitBtn.textContent = 'Submit Order';
+    submitBtn.disabled = false;
+  }
 });
 
 // --- Init ---

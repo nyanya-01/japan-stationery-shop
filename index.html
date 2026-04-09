@@ -191,6 +191,74 @@
   </div>
 </aside>
 
+<!-- Bybit Pay Modal -->
+<div class="bybit-overlay" id="bybitOverlay"></div>
+<div class="bybit-modal" id="bybitModal">
+  <div class="bybit-modal-header">
+    <h3>Pay with Bybit Pay (USDT)</h3>
+    <button class="bybit-modal-close" id="bybitModalClose">&times;</button>
+  </div>
+  <div class="bybit-modal-body" id="bybitModalBody">
+    <!-- Order Summary -->
+    <div class="bybit-order-summary">
+      <div id="bybitOrderItems" class="bybit-items-list"></div>
+      <div class="bybit-total-row">
+        <span>Total</span>
+        <span class="bybit-total-amount"><span id="bybitTotalAmount"></span> USDT</span>
+      </div>
+      <p class="bybit-usdt-note">※ 1 USDT ≈ $1.00 USD</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="bybit-step">
+      <div class="bybit-step-num">1</div>
+      <div class="bybit-step-content">
+        <p class="bybit-step-title">Send USDT via Bybit Pay</p>
+        <p class="bybit-step-desc">Scan the QR code below with your Bybit app and send exactly <strong id="bybitTotalStep1"></strong> USDT.</p>
+        <div class="bybit-qr-wrap">
+          <img src="Stationaery/bybit-qr.png" alt="Bybit Pay QR Code" class="bybit-qr-img">
+          <p class="bybit-qr-note">Bybit ID: <strong>171381227</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="bybit-step">
+      <div class="bybit-step-num">2</div>
+      <div class="bybit-step-content">
+        <p class="bybit-step-title">Submit your order details</p>
+        <form id="bybitOrderForm" action="https://formspree.io/f/xdapvynr" method="POST">
+          <input type="hidden" name="order_summary" id="bybitFormSummary">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" name="name" required placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label>Shipping Address *</label>
+            <textarea name="address" rows="3" required placeholder="Street, City, Country, ZIP"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" name="email" required placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Bybit Transaction ID *</label>
+            <input type="text" name="transaction_id" required placeholder="e.g. TXN-XXXXXXXXXX">
+            <p class="form-hint">Find it in Bybit App → Assets → Transaction History</p>
+          </div>
+          <button type="submit" class="btn btn-bybit bybit-submit-btn">Submit Order</button>
+        </form>
+        <!-- Success message (hidden by default) -->
+        <div class="bybit-success" id="bybitSuccess" style="display:none;">
+          <div class="bybit-success-icon">&#10003;</div>
+          <h4>Order Submitted!</h4>
+          <p>Thank you! We'll confirm your order by email within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Footer -->
 <footer class="footer">
   <div class="container">

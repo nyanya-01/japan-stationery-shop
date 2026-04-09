@@ -698,6 +698,244 @@ body {
   min-height: 45px;
 }
 
+/* Bybit Pay Modal */
+.bybit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.bybit-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bybit-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  width: 480px;
+  max-width: 94vw;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  z-index: 301;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.bybit-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.bybit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+
+.bybit-modal-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.bybit-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--text-light);
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.bybit-modal-body {
+  padding: 20px 24px 24px;
+}
+
+.bybit-order-summary {
+  background: #fdf6e3;
+  border: 1px solid #f7a60033;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.bybit-items-list {
+  font-size: 0.88rem;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.bybit-items-list div {
+  padding: 2px 0;
+}
+
+.bybit-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f7a60055;
+  padding-top: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.bybit-total-amount {
+  color: #e09500;
+  font-size: 1.2rem;
+}
+
+.bybit-usdt-note {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.bybit-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.bybit-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f7a600;
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bybit-step-content {
+  flex: 1;
+}
+
+.bybit-step-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.bybit-step-desc {
+  font-size: 0.87rem;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.bybit-qr-wrap {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.bybit-qr-img {
+  width: 180px;
+  height: 180px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.bybit-qr-note {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #f7a600;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.bybit-submit-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 13px;
+}
+
+.bybit-success {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.bybit-success-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #27ae60;
+  color: white;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.bybit-success h4 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.bybit-success p {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+
 /* Footer */
 .footer {
   background: var(--accent);
