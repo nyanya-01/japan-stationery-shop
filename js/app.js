@@ -76,14 +76,34 @@ document.querySelectorAll('.product-card').forEach(card => {
   const imgs = card.querySelectorAll('.product-img');
   const dots = card.querySelectorAll('.img-dot');
 
+  function showImage(idx) {
+    imgs.forEach(img => img.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    imgs[idx].classList.add('active');
+    dots[idx].classList.add('active');
+  }
+
+  function currentIndex() {
+    return [...imgs].findIndex(img => img.classList.contains('active'));
+  }
+
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
-      const idx = parseInt(dot.dataset.index);
-      imgs.forEach(img => img.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-      imgs[idx].classList.add('active');
-      dot.classList.add('active');
+      showImage(parseInt(dot.dataset.index));
     });
+  });
+
+  const btnLeft = card.querySelector('.img-arrow-left');
+  const btnRight = card.querySelector('.img-arrow-right');
+
+  btnLeft.addEventListener('click', () => {
+    const idx = (currentIndex() - 1 + imgs.length) % imgs.length;
+    showImage(idx);
+  });
+
+  btnRight.addEventListener('click', () => {
+    const idx = (currentIndex() + 1) % imgs.length;
+    showImage(idx);
   });
 });
 
@@ -284,11 +304,12 @@ function initPayPal() {
 
   paypal.Buttons({
     style: {
-      layout: 'horizontal',
+      layout: 'vertical',
       color: 'blue',
       shape: 'rect',
       label: 'pay',
       height: 45,
+      tagline: false,
     },
     createOrder: function(data, actions) {
       const order = getOrderSummary();
